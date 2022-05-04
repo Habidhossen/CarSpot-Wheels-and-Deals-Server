@@ -31,10 +31,10 @@ async function run() {
       res.send(result);
     });
 
-    // GET Product
+    // GET all Product
     app.get("/inventory", async (req, res) => {
-      // const query = req.query;
-      const query = {};
+      const query = req.query;
+      // const query = {};
       const cursor = productsCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
@@ -48,15 +48,29 @@ async function run() {
       res.send(result);
     });
 
+    // GET One Product by Email
+    app.get("/inventory", async (req, res) => {
+      // const id = req.params.email;
+      // const query = { _id: ObjectId(id) };
+      // const result = await productsCollection.find(query);
+      // res.send(result);
+      const email = req.query.email;
+      const query = { email: email };
+      const cursor = productsCollection.find(query);
+      const myItems = await cursor.toArray();
+      res.send(myItems);
+    });
+
     // UPDATE Product by ID
     app.put("/inventory/:id", async (req, res) => {
       const id = req.params.id;
-      const data = req.body;
+      const updatedQuantity = req.body;
       const filter = { _id: ObjectId(id) };
       const options = { upsert: true };
       const updateDoc = {
         $set: {
-          //
+          // quantity: updatedQuantity.quantity,
+          ...updatedQuantity,
         },
       };
       const result = await productsCollection.updateOne(
