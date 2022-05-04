@@ -24,7 +24,6 @@ async function run() {
     const productsCollection = client.db("car-spot").collection("products");
 
     // POST Product
-    // http://localhost:5000/product
     app.post("/inventory", async (req, res) => {
       const data = req.body;
       const result = await productsCollection.insertOne(data);
@@ -32,7 +31,6 @@ async function run() {
     });
 
     // GET Product
-    // http://localhost:5000/products
     app.get("/inventory", async (req, res) => {
       // const query = req.query;
       const query = {};
