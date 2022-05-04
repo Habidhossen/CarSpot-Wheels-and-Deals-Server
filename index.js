@@ -23,18 +23,19 @@ async function run() {
     await client.connect();
     const productsCollection = client.db("car-spot").collection("products");
 
-    // post API
+    // POST Product
+    // http://localhost:5000/product
     app.post("/product", async (req, res) => {
-      // const data = req.body;
-      // console.log(data);
-      // const result = await productsCollection.insertOne(data);
-
-      res.send("data");
+      const data = req.body;
+      const result = await productsCollection.insertOne(data);
+      res.send(result);
     });
 
-    // get API
+    // GET Product
+    // http://localhost:5000/products
     app.get("/products", async (req, res) => {
-      const query = req.query;
+      // const query = req.query;
+      const query = {};
       const cursor = productsCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
