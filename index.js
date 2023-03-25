@@ -7,11 +7,13 @@ const { MongoClient, ServerApiVersion } = require("mongodb");
 const ObjectId = require("mongodb").ObjectId;
 
 // middleware
-app.use(cors());
+app.use(
+  cors({ origin: "*", methods: ["GET", "POST", "PUT", "PATCH", "DELETE"] }) // for handling CORS policy error
+);
 app.use(express.json());
 
 // mongoDB drive code
-const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.3mjkw.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.3mjkw.mongodb.net/car-spot?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -34,7 +36,6 @@ async function run() {
     // GET all Product
     app.get("/inventory", async (req, res) => {
       const query = req.query;
-      // const query = {};
       const cursor = productsCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
@@ -50,10 +51,6 @@ async function run() {
 
     // GET One Product by Email
     app.get("/inventory", async (req, res) => {
-      // const id = req.params.email;
-      // const query = { _id: ObjectId(id) };
-      // const result = await productsCollection.find(query);
-      // res.send(result);
       const email = req.query.email;
       const query = { email: email };
       const cursor = productsCollection.find(query);
